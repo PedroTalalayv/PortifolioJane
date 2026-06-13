@@ -5,6 +5,28 @@ export function Identity() {
   const railRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
+  // fade-in nos mockups conforme passam pela viewport (track horizontal)
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track || !('IntersectionObserver' in window)) return;
+
+    const items = track.querySelectorAll<HTMLElement>('.mockup-reveal');
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.15, rootMargin: '0px -5% 0px -5%' },
+    );
+
+    items.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   useEffect(() => {
     const update = () => {
       const rail = railRef.current;
@@ -54,7 +76,7 @@ export function Identity() {
             <div className="hp-track" ref={trackRef}>
               {/* col 1 — LOGO */}
               <div className="hp-col">
-                <div className="hp-item hp-item--md">
+                <div className="hp-item hp-item--md mockup-reveal">
                   <div className="hp-item__eyebrow">★ marca · 2025</div>
                   <div className="hp-item__media">
                     <img src="/uploads/mockups/logo.png" alt="Logo ADORA" />
@@ -77,7 +99,7 @@ export function Identity() {
               <div className="hp-spacer" />
 
               <div className="hp-col">
-                <div className="hp-item hp-item--md">
+                <div className="hp-item hp-item--md mockup-reveal">
                   <div className="hp-item__eyebrow">embalagem · 2025</div>
                   <div className="hp-item__media">
                     <img src="/uploads/mockups/garrafas.png" alt="Garrafas com logo" />
@@ -89,7 +111,7 @@ export function Identity() {
 
               {/* col 3 — banner wide */}
               <div className="hp-col">
-                <div className="hp-item hp-item--md">
+                <div className="hp-item hp-item--md mockup-reveal">
                   <div className="hp-item__eyebrow">out-of-home · banner · 2025</div>
                   <div className="hp-item__media">
                     <img src="/uploads/mockups/banner.png" alt="Banner" />
@@ -101,7 +123,7 @@ export function Identity() {
 
               {/* col 4 — crachá */}
               <div className="hp-col">
-                <div className="hp-item hp-item--md">
+                <div className="hp-item hp-item--md mockup-reveal">
                   <div className="hp-item__eyebrow">papelaria · crachá · 2025</div>
                   <div className="hp-item__media">
                     <img src="/uploads/mockups/cracha.png" alt="Crachá com logo" />

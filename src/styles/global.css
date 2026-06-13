@@ -1444,6 +1444,20 @@ body::before{
 .identity .hp-callout__text{ color: var(--cream-2); }
 .identity .hp-callout__text em{ color: var(--cream); }
 .identity .hp-callout__sig{ color: var(--cream-3); }
+
+/* fade-in dos mockups quando entram no viewport (track horizontal) */
+.mockup-reveal{
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 1.4s cubic-bezier(.2,.7,.2,1),
+    transform 1.4s cubic-bezier(.2,.7,.2,1);
+  will-change: opacity, transform;
+}
+.mockup-reveal.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
 .identity .sec-head .meta{ color: var(--cream-2); }
 .identity__grid{
   display:grid;
@@ -1511,21 +1525,81 @@ body::before{
   .proj.size-lg, .proj.size-md, .proj.size-sm, .proj.size-side{ grid-column: span 12; }
 }
 
-/* ===== bridge entre Mockups (burgundy) e Motion (cream) ===== */
-.mockups-motion-bridge{
-  height: 60vh;
-  background: linear-gradient(to bottom, var(--burgundy) 0%, var(--cream) 100%);
-  position: relative;
-}
-
 /* ============================ MOTION / VIDEO ============================ */
 .motion{
   background: var(--cream);
   position: relative;
+  padding: 80px 0 100px;
 }
-/* rail mais alto pq tem MUITO mais conteúdo horizontal */
-.motion .motion-hp-wrap{
-  height: 700vh;
+.motion__head{
+  max-width: 1500px;
+  margin: 0 auto 40px;
+  padding: 0 var(--pad-x);
+}
+.motion__title{
+  font-family: var(--f-display);
+  font-size: clamp(40px, 5vw, 80px);
+  letter-spacing: -.005em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--burgundy);
+}
+
+/* strip horizontal: scroll lateral só quando mouse está em cima */
+.motion__strip{
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(20px, 2vw, 36px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 var(--pad-x);
+  /* sem scroll-behavior: smooth — ele estava brigando com o wheel handler
+     e fazia cada deltaY virar uma animação separada (lag visível) */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.motion__strip::-webkit-scrollbar{ display: none; }
+
+.reel-item{
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* fade-in inicial — IntersectionObserver adiciona .is-visible quando aparece */
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 1.4s cubic-bezier(.2,.7,.2,1),
+    transform 1.4s cubic-bezier(.2,.7,.2,1);
+  will-change: opacity, transform;
+}
+.reel-item.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+.reel-item__media{
+  height: clamp(420px, 70vh, 720px);
+  width: auto;
+  background: var(--brown);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.reel-item__media video{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+}
+.reel-item__eyebrow{
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--brown);
+  opacity: .8;
 }
 
 /* overrides do hp para motion (bg cream) */

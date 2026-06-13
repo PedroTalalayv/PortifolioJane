@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { clamp } from '../lib/utils';
 
 interface VideoItem {
   src: string;
@@ -29,26 +28,14 @@ const VIDEOS: VideoItem[] = [
   { src: `${BUCKET_BASE}/motion/mvi-2478.mp4`,              eyebrow: 'mvi · 2478' },
 ];
 
-function widthFor(aspect: number | null): string {
-  if (aspect === null) return 'clamp(380px, 32vw, 540px)';
-  if (aspect > 1.3) return 'clamp(460px, 44vw, 760px)';
-  if (aspect < 0.8) return 'clamp(240px, 22vw, 360px)';
-  return 'clamp(340px, 30vw, 500px)';
-}
-
 function VideoTile({ src, eyebrow }: VideoItem) {
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
-  const aspect = dims ? dims.w / dims.h : null;
 
   return (
-    <div className="hp-item motion-item">
-      <div className="hp-item__eyebrow">{eyebrow}</div>
+    <div className="reel-item">
       <div
-        className="hp-item__media motion-thumb"
-        style={{
-          width: widthFor(aspect),
-          aspectRatio: dims ? `${dims.w} / ${dims.h}` : '16 / 10',
-        }}
+        className="reel-item__media"
+        style={{ aspectRatio: dims ? `${dims.w} / ${dims.h}` : '9 / 16' }}
       >
         <video
           className="motion-video"
@@ -66,44 +53,53 @@ function VideoTile({ src, eyebrow }: VideoItem) {
           }}
         />
       </div>
+      <div className="reel-item__eyebrow">{eyebrow}</div>
     </div>
   );
 }
 
 export function Motion() {
-  const railRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const stripRef = useRef<HTMLDivElement>(null);
 
+  // wheel handler: dentro do strip, deltaY vira scrollLeft (sem afetar a página).
+  // Fora do strip, scroll normal — passa direto pra próxima seção.
   useEffect(() => {
-    const update = () => {
-      const rail = railRef.current;
-      const track = trackRef.current;
-      if (!rail || !track) return;
-      const rect = rail.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const total = rail.offsetHeight - vh;
-      const p = clamp(-rect.top / Math.max(total, 1), 0, 1);
-      const moveable = track.scrollWidth - window.innerWidth + 100;
-      track.style.transform = `translateX(${-p * moveable}px)`;
+    const strip = stripRef.current;
+    if (!strip) return;
+
+    const onWheel = (e: WheelEvent) => {
+      const maxScroll = strip.scrollWidth - strip.clientWidth;
+      const goingRight = e.deltaY > 0;
+      const atEnd = goingRight ? strip.scrollLeft >= maxScroll - 1 : strip.scrollLeft <= 0;
+      if (atEnd) return;
+      e.preventDefault();
+      strip.scrollLeft += e.deltaY * 2.5;
     };
 
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        update();
-        ticking = false;
-      });
-    };
+    strip.addEventListener('wheel', onWheel, { passive: false });
+    return () => strip.removeEventListener('wheel', onWheel);
+  }, []);
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', update);
-    };
+  // fade-in nos cards conforme entram na viewport (scroll horizontal ou vertical)
+  useEffect(() => {
+    const strip = stripRef.current;
+    if (!strip || !('IntersectionObserver' in window)) return;
+
+    const items = strip.querySelectorAll<HTMLElement>('.reel-item');
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.15, rootMargin: '0px -5% 0px -5%' },
+    );
+
+    items.forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, []);
 
   return (
@@ -113,113 +109,14 @@ export function Motion() {
       data-section="motion"
       data-screen-label="05 Motion"
     >
-      <div className="hp-wrap motion-hp-wrap" ref={railRef}>
-        <div className="hp-sticky">
-          <div className="hp-sticky__head">
-            <h2 className="title">motion &amp; vídeo</h2>
-          </div>
+      <div className="motion__head">
+        <h2 className="motion__title">motion &amp; vídeo</h2>
+      </div>
 
-          <div className="hp-sticky__viewport">
-            <div className="hp-track" ref={trackRef}>
-              <div className="hp-col">
-                <VideoTile {...VIDEOS[0]} />
-              </div>
-
-              <div className="hp-spacer hp-spacer--half" />
-
-              <div className="hp-callout">
-                <div className="hp-callout__text">
-                  toda marca tem um <em>som</em>.
-                </div>
-                <div className="hp-callout__sig">deixa tocar.</div>
-              </div>
-
-              <div className="hp-spacer" />
-
-              <div className="hp-col">
-                <VideoTile {...VIDEOS[1]} />
-                <VideoTile {...VIDEOS[2]} />
-              </div>
-
-              <div className="hp-spacer" />
-
-              <div className="hp-col">
-                <VideoTile {...VIDEOS[3]} />
-              </div>
-
-              <div className="hp-spacer" />
-
-              <div className="hp-col">
-                <VideoTile {...VIDEOS[4]} />
-              </div>
-
-              <div className="hp-spacer hp-spacer--half" />
-
-              <div className="hp-col">
-                <VideoTile {...VIDEOS[5]} />
-                <VideoTile {...VIDEOS[6]} />
-              </div>
-
-              <div className="hp-spacer" />
-
-              <div className="hp-col">
-                <VideoTile {...VIDEOS[7]} />
-              </div>
-
-              <div className="hp-spacer hp-spacer--half" />
-
-              <div className="hp-col">
-                <VideoTile {...VIDEOS[8]} />
-                <VideoTile {...VIDEOS[9]} />
-              </div>
-
-              <div className="hp-spacer" />
-
-              <div className="hp-callout">
-                <div className="hp-callout__text">
-                  <em>captação</em>,
-                  <br />
-                  edição,
-                  <br />
-                  motion.
-                </div>
-                <div className="hp-callout__sig">tudo aqui.</div>
-              </div>
-
-              <div className="hp-spacer" />
-
-              <div className="hp-col">
-                <VideoTile {...VIDEOS[10]} />
-                <VideoTile {...VIDEOS[12]} />
-              </div>
-
-              <div className="hp-spacer hp-spacer--half" />
-
-              <div className="hp-col">
-                <VideoTile {...VIDEOS[11]} />
-              </div>
-
-              <div className="hp-spacer" />
-
-              <div className="hp-col">
-                <VideoTile {...VIDEOS[13]} />
-              </div>
-
-              <div className="hp-spacer" />
-
-              <div className="hp-col">
-                <VideoTile {...VIDEOS[14]} />
-              </div>
-
-              <div className="hp-spacer hp-spacer--half" />
-
-              <div className="hp-col">
-                <VideoTile {...VIDEOS[15]} />
-                <VideoTile {...VIDEOS[16]} />
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="motion__strip" ref={stripRef}>
+        {VIDEOS.map((v, i) => (
+          <VideoTile key={i} {...v} />
+        ))}
       </div>
     </section>
   );

@@ -18,10 +18,14 @@ interface StoryItem {
   img?: string;       // se presente, imagem cobre o card
 }
 
+const BUCKET_BASE =
+  'https://dfprzgakslkbfqptzthl.supabase.co/storage/v1/object/public/designJane';
+
 const FEED_ITEMS: FrameItem[] = [
   { title: 'Post @adora.studio', date: '04 · 2025', bg: 'transparent', color: 'var(--burgundy)', img: '/uploads/feed-01.png' },
   { title: 'Post @adora.studio', date: '04 · 2025', bg: 'transparent', color: 'var(--burgundy)', img: '/uploads/feed-02.png' },
   { title: 'Post @adora.studio', date: '03 · 2025', bg: 'transparent', color: 'var(--burgundy)', img: '/uploads/feed-03.jpg' },
+  { title: 'Expoauto v2',        date: '04 · 2025', bg: 'transparent', color: 'var(--burgundy)', img: `${BUCKET_BASE}/feed/expoautoo-v2.png` },
   { title: 'Post @adora.studio', date: '02 · 2025', bg: 'transparent', color: 'var(--burgundy)', img: '/uploads/feed-04.jpg' },
   { title: 'Post @adora.studio', date: '01 · 2025', bg: 'transparent', color: 'var(--burgundy)', img: '/uploads/feed-05.png' },
   { title: 'Post @adora.studio', date: '04 · 2025', bg: 'transparent', color: 'var(--burgundy)', img: '/uploads/feed-06.png' },

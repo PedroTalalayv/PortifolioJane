@@ -28,7 +28,6 @@ function App() {
       <Marquee />
       <Social />
       <Identity />
-      <div className="mockups-motion-bridge" aria-hidden="true" />
       <Motion />
       <Playlist />
       <Footer />
