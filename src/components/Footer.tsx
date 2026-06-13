@@ -4,11 +4,27 @@ const ArrowGlyph = () => (
   </svg>
 );
 
+// mensagem pré-fixada do whatsapp encoded — preserva acentos e espaços
+const WHATSAPP_MSG = encodeURIComponent(
+  'olá vim pelo site e tenho interesse nos serviços da Adora',
+);
+
 const LINKS = [
-  { href: 'mailto:oi@adora.design', label: 'oi@adora.design', external: false },
-  { href: '#', label: '@adora.studio', external: true },
-  { href: '#', label: 'behance / jane', external: true },
-  { href: 'https://wa.me/', label: 'whatsapp →', external: true },
+  {
+    href: 'https://www.instagram.com/adoradesignr?igsh=MXNheWQwdTV0ZzZ0ZQ==',
+    label: 'instagram · @adoradesignr',
+    external: true,
+  },
+  {
+    href: `https://wa.me/5562983466569?text=${WHATSAPP_MSG}`,
+    label: 'whatsapp →',
+    external: true,
+  },
+  {
+    href: 'mailto:adoradesignr@gmail.com',
+    label: 'email · adoradesignr@gmail.com',
+    external: false,
+  },
 ];
 
 export function Footer() {
