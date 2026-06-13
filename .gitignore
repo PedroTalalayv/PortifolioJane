@@ -14,8 +14,9 @@ dist-ssr
 public/uploads/motion/
 
 # legacy bundle e uploads originais com vídeos/PSDs
+# usa barra inicial pra ancorar na raiz e NÃO casar com public/uploads/
 legacy/
-uploads/
+/uploads/
 .thumbnail/
 screenshots/
 
