@@ -6,36 +6,37 @@ interface VideoItem {
   eyebrow: string;
 }
 
+const BUCKET_BASE =
+  'https://dfprzgakslkbfqptzthl.supabase.co/storage/v1/object/public/designJane';
+
 const VIDEOS: VideoItem[] = [
-  { src: '/uploads/motion/comp-01.mp4',               eyebrow: '★ comp 01 · 2025' },
-  { src: '/uploads/motion/comp-02.mp4',               eyebrow: 'comp 02 · 2025' },
-  { src: '/uploads/motion/motion-logo.mp4',           eyebrow: 'motion logo · 2025' },
-  { src: '/uploads/motion/vertical-01.mp4',           eyebrow: 'vertical · stories' },
-  { src: '/uploads/motion/encanto-uva.mp4',           eyebrow: 'encanto de uva · 2025' },
-  { src: '/uploads/motion/coelho.mp4',                eyebrow: 'coelho · campanha' },
-  { src: '/uploads/motion/carnaval.mp4',              eyebrow: 'carnaval · dia 15' },
-  { src: '/uploads/motion/delivery-carro.mp4',        eyebrow: 'delivery · carro' },
-  { src: '/uploads/motion/delivery-morgana.mp4',      eyebrow: 'delivery · morgana' },
-  { src: '/uploads/motion/retro.mp4',                 eyebrow: 'retrô · dia 27' },
-  { src: '/uploads/motion/pre-lancamento-batata.mp4', eyebrow: 'pré lançamento · batata' },
-  { src: '/uploads/motion/bastidores.mp4',            eyebrow: 'bastidores' },
-  { src: '/uploads/motion/video-bastidores.mp4',      eyebrow: 'bastidores · v2' },
-  { src: '/uploads/motion/vertical-02.mp4',           eyebrow: 'vertical · v2' },
-  { src: '/uploads/motion/mvi-1750.mp4',              eyebrow: 'mvi · 1750' },
-  { src: '/uploads/motion/mvi-2132.mp4',              eyebrow: 'mvi · 2132' },
-  { src: '/uploads/motion/mvi-2478.mp4',              eyebrow: 'mvi · 2478' },
+  { src: `${BUCKET_BASE}/motion/comp-01.mp4`,               eyebrow: '★ comp 01 · 2025' },
+  { src: `${BUCKET_BASE}/motion/comp-02.mp4`,               eyebrow: 'comp 02 · 2025' },
+  { src: `${BUCKET_BASE}/motion/motion-logo.mp4`,           eyebrow: 'motion logo · 2025' },
+  { src: `${BUCKET_BASE}/motion/vertical-01.mp4`,           eyebrow: 'vertical · stories' },
+  { src: `${BUCKET_BASE}/motion/encanto-uva.mp4`,           eyebrow: 'encanto de uva · 2025' },
+  { src: `${BUCKET_BASE}/motion/coelho.mp4`,                eyebrow: 'coelho · campanha' },
+  { src: `${BUCKET_BASE}/motion/carnaval.mp4`,              eyebrow: 'carnaval · dia 15' },
+  { src: `${BUCKET_BASE}/motion/delivery-carro.mp4`,        eyebrow: 'delivery · carro' },
+  { src: `${BUCKET_BASE}/motion/delivery-morgana.mp4`,      eyebrow: 'delivery · morgana' },
+  { src: `${BUCKET_BASE}/motion/retro.mp4`,                 eyebrow: 'retrô · dia 27' },
+  { src: `${BUCKET_BASE}/motion/pre-lancamento-batata.mp4`, eyebrow: 'pré lançamento · batata' },
+  { src: `${BUCKET_BASE}/motion/bastidores.mp4`,            eyebrow: 'bastidores' },
+  { src: `${BUCKET_BASE}/motion/video-bastidores.mp4`,      eyebrow: 'bastidores · v2' },
+  { src: `${BUCKET_BASE}/motion/vertical-02.mp4`,           eyebrow: 'vertical · v2' },
+  { src: `${BUCKET_BASE}/motion/mvi-1750.mp4`,              eyebrow: 'mvi · 1750' },
+  { src: `${BUCKET_BASE}/motion/mvi-2132.mp4`,              eyebrow: 'mvi · 2132' },
+  { src: `${BUCKET_BASE}/motion/mvi-2478.mp4`,              eyebrow: 'mvi · 2478' },
 ];
 
-/** width responsivo baseado na orientação detectada do vídeo */
 function widthFor(aspect: number | null): string {
-  if (aspect === null) return 'clamp(380px, 32vw, 540px)';   // fallback enquanto carrega
-  if (aspect > 1.3) return 'clamp(460px, 44vw, 760px)';      // landscape
-  if (aspect < 0.8) return 'clamp(240px, 22vw, 360px)';      // portrait
-  return 'clamp(340px, 30vw, 500px)';                        // square-ish
+  if (aspect === null) return 'clamp(380px, 32vw, 540px)';
+  if (aspect > 1.3) return 'clamp(460px, 44vw, 760px)';
+  if (aspect < 0.8) return 'clamp(240px, 22vw, 360px)';
+  return 'clamp(340px, 30vw, 500px)';
 }
 
 function VideoTile({ src, eyebrow }: VideoItem) {
-  // dims = dimensões reais do vídeo lidas via onLoadedMetadata
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
   const aspect = dims ? dims.w / dims.h : null;
 
@@ -120,14 +121,12 @@ export function Motion() {
 
           <div className="hp-sticky__viewport">
             <div className="hp-track" ref={trackRef}>
-              {/* col 1 — hero */}
               <div className="hp-col">
                 <VideoTile {...VIDEOS[0]} />
               </div>
 
               <div className="hp-spacer hp-spacer--half" />
 
-              {/* callout 1 */}
               <div className="hp-callout">
                 <div className="hp-callout__text">
                   toda marca tem um <em>som</em>.
@@ -137,7 +136,6 @@ export function Motion() {
 
               <div className="hp-spacer" />
 
-              {/* col 2 — dois empilhados */}
               <div className="hp-col">
                 <VideoTile {...VIDEOS[1]} />
                 <VideoTile {...VIDEOS[2]} />
@@ -145,21 +143,18 @@ export function Motion() {
 
               <div className="hp-spacer" />
 
-              {/* col 3 — vertical solo */}
               <div className="hp-col">
                 <VideoTile {...VIDEOS[3]} />
               </div>
 
               <div className="hp-spacer" />
 
-              {/* col 4 — encanto uva */}
               <div className="hp-col">
                 <VideoTile {...VIDEOS[4]} />
               </div>
 
               <div className="hp-spacer hp-spacer--half" />
 
-              {/* col 5 — coelho + carnaval */}
               <div className="hp-col">
                 <VideoTile {...VIDEOS[5]} />
                 <VideoTile {...VIDEOS[6]} />
@@ -167,14 +162,12 @@ export function Motion() {
 
               <div className="hp-spacer" />
 
-              {/* col 6 — delivery carro */}
               <div className="hp-col">
                 <VideoTile {...VIDEOS[7]} />
               </div>
 
               <div className="hp-spacer hp-spacer--half" />
 
-              {/* col 7 — delivery morgana + retro */}
               <div className="hp-col">
                 <VideoTile {...VIDEOS[8]} />
                 <VideoTile {...VIDEOS[9]} />
@@ -182,7 +175,6 @@ export function Motion() {
 
               <div className="hp-spacer" />
 
-              {/* callout 2 */}
               <div className="hp-callout">
                 <div className="hp-callout__text">
                   <em>captação</em>,
@@ -196,7 +188,6 @@ export function Motion() {
 
               <div className="hp-spacer" />
 
-              {/* col 8 — pré lançamento + bastidores v2 */}
               <div className="hp-col">
                 <VideoTile {...VIDEOS[10]} />
                 <VideoTile {...VIDEOS[12]} />
@@ -204,28 +195,24 @@ export function Motion() {
 
               <div className="hp-spacer hp-spacer--half" />
 
-              {/* col 9 — bastidores solo */}
               <div className="hp-col">
                 <VideoTile {...VIDEOS[11]} />
               </div>
 
               <div className="hp-spacer" />
 
-              {/* col 10 — vertical v2 */}
               <div className="hp-col">
                 <VideoTile {...VIDEOS[13]} />
               </div>
 
               <div className="hp-spacer" />
 
-              {/* col 11 — mvi 1750 */}
               <div className="hp-col">
                 <VideoTile {...VIDEOS[14]} />
               </div>
 
               <div className="hp-spacer hp-spacer--half" />
 
-              {/* col 12 — mvi 2132 + 2478 */}
               <div className="hp-col">
                 <VideoTile {...VIDEOS[15]} />
                 <VideoTile {...VIDEOS[16]} />
