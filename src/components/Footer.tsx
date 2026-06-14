@@ -16,7 +16,7 @@ const LINKS = [
     external: true,
   },
   {
-    href: `https://wa.me/5562983466569?text=${WHATSAPP_MSG}`,
+    href: `https://wa.me/5562983466560?text=${WHATSAPP_MSG}`,
     label: 'whatsapp →',
     external: true,
   },
