@@ -74,6 +74,11 @@ export function Playlist() {
     const playlistEl = document.getElementById('playlist');
     if (!stage || !playlistEl) return;
 
+    // Em mobile a wheel vira lista vertical com scroll nativo (ver global.css
+    // breakpoint 720px). Os handlers de touch brigariam com o scroll dos songs,
+    // então só ativamos a interação custom em viewports maiores.
+    const isMobile = () => window.matchMedia('(max-width: 720px)').matches;
+
     // advance mexe nos refs (incluindo currentIdxRef pra sincronia imediata) e no state
     const advance = (dir: 1 | -1) => {
       const prev = currentIdxRef.current;
@@ -94,6 +99,7 @@ export function Playlist() {
       (dir === -1 && currentIdxRef.current <= 0);
 
     const onWheel = (e: WheelEvent) => {
+      if (isMobile()) return;
       const rect = playlistEl.getBoundingClientRect();
       const visible = rect.top < window.innerHeight * 0.5 && rect.bottom > window.innerHeight * 0.5;
       if (!visible) return;
@@ -109,10 +115,11 @@ export function Playlist() {
 
     let touchY: number | null = null;
     const onTouchStart = (e: TouchEvent) => {
+      if (isMobile()) return;
       touchY = e.touches[0].clientY;
     };
     const onTouchMove = (e: TouchEvent) => {
-      if (touchY == null) return;
+      if (isMobile() || touchY == null) return;
       const dy = e.touches[0].clientY - touchY;
       const dir: 1 | -1 = dy < 0 ? 1 : -1;
       if (isAtBoundary(dir)) return;

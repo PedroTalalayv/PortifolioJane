@@ -124,8 +124,9 @@ body{
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
-  cursor: none;                     /* hide native cursor; elemento .cursor segue o mouse */
 }
+/* cursor custom só faz sentido em ponteiros precisos (mouse) — em touch o
+   navegador já não mostra cursor; setar cursor:none escondia o foco visual. */
 @media (hover: hover){
   body, a, button{ cursor: none; }
 }
@@ -2252,4 +2253,238 @@ body.cursor-light .cursor__star path{
   background: currentColor;
   vertical-align: middle;
   clip-path: polygon(50% 0, 58% 38%, 100% 50%, 58% 62%, 50% 100%, 42% 62%, 0 50%, 42% 38%);
+}
+
+/* =================================================================
+   MOBILE — ≤ 720px
+   Desliga os horizontal-pin (scroll vertical longo + translateX via JS) e
+   troca por scroll horizontal nativo (touch-friendly). Usa !important nos
+   transforms pra sobrescrever os inline styles que o JS continua setando.
+================================================================= */
+@media (max-width: 720px){
+
+  /* ---------- HERO + SIGNATURE ---------- */
+  .hs-jane{
+    font-size: clamp(110px, 36vw, 180px);
+    padding: .12em .15em .5em .25em;
+  }
+  .hs-jane-tagline-mix{ transform: translate(-50%, -8px); }
+  .hs-jane-tagline-mix .caps{ font-size: 11px; letter-spacing: .22em; }
+  .hs-jane-tagline-mix .script{ font-size: 24px; }
+  .hs-studio{ font-size: 28px; }
+  .hs-bg__row{ font-size: 56px; }
+  /* estrelas decorativas sobrepunham o Jane em viewports estreitas */
+  .hs-stars{ display: none; }
+
+  /* ---------- ABOUT ---------- */
+  .about{ padding: 70px var(--pad-x); }
+  .about__inner{ gap: 30px; }
+  .about__photo{ max-width: 300px; margin: 0 auto; }
+  .about__photo::after{ font-size: 64px; padding: 20px; }
+  .about__hello{ font-size: clamp(44px, 13vw, 64px); }
+  .about__name{ font-size: clamp(52px, 16vw, 84px); }
+  .about__bio{ font-size: 15px; max-width: none; }
+  .about__star{ width: 60px; top: -18px; right: -18px; }
+
+  /* ---------- SECTION HEAD ---------- */
+  .sec-head{
+    padding: 36px var(--pad-x) 18px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .sec-head .title{ font-size: clamp(48px, 14vw, 80px); }
+  .social .sec-head{ align-items: flex-start; }
+  .social .sec-head .title{
+    white-space: normal;
+    text-align: left;
+  }
+  .sec-head .meta{ text-align: left; max-width: none; }
+
+  /* ---------- FEED — kill pin, native horizontal scroll ---------- */
+  .feed-rail{ height: auto !important; }
+  .feed-sticky{
+    position: relative !important;
+    height: auto !important;
+    padding-bottom: 24px;
+  }
+  .feed-sticky__head{ padding: 24px var(--pad-x) 14px; }
+  .feed-sticky__viewport{
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .feed-sticky__viewport::-webkit-scrollbar{ display: none; }
+  .feed-track{
+    transform: none !important;
+    gap: 14px;
+    padding: 0 var(--pad-x) 8px;
+  }
+  .feed-track .frame-card{ width: 76vw !important; }
+
+  /* ---------- STORIES — kill fan, scroll horizontal ---------- */
+  .stories-fan{
+    height: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 16px var(--pad-x) 24px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    justify-content: flex-start;
+  }
+  .stories-fan::-webkit-scrollbar{ display: none; }
+  .stories-fan__inner{
+    display: flex;
+    gap: 14px;
+    width: auto;
+    height: auto;
+    transform: none !important;
+  }
+  .stories-fan .story-card,
+  .stories-fan.is-fanned .story-card{
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 55vw !important;
+    flex-shrink: 0;
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none;
+  }
+  .stories-fan.is-fanned .story-card:hover{ transform: none !important; }
+
+  /* ---------- MOCKUPS (hp pin) — kill pin, native scroll ---------- */
+  .hp-wrap{ height: auto !important; }
+  .hp-sticky{
+    position: relative !important;
+    height: auto !important;
+    padding-bottom: 28px;
+  }
+  .hp-sticky__head{ padding: 28px var(--pad-x) 14px; }
+  .hp-sticky__head .title{ font-size: clamp(36px, 11vw, 56px); }
+  .hp-sticky__viewport{
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .hp-sticky__viewport::-webkit-scrollbar{ display: none; }
+  .hp-track{
+    transform: none !important;
+    gap: 14px;
+    padding: 0 var(--pad-x) 8px;
+  }
+  .hp-item--sm  .hp-item__media,
+  .hp-item--md  .hp-item__media,
+  .hp-item--lg  .hp-item__media,
+  .hp-item--wide .hp-item__media,
+  .hp-item--tall .hp-item__media,
+  .hp-item--square .hp-item__media{ width: 76vw; }
+  .hp-spacer,
+  .hp-spacer--half{ display: none; }
+  .hp-callout{
+    width: 76vw;
+    padding: 24px 12px;
+  }
+  .hp-callout__text{ font-size: clamp(22px, 7vw, 34px); }
+  .hp-callout__sig{ font-size: clamp(40px, 12vw, 60px); }
+
+  /* ---------- MOTION strip (já é nativo) ---------- */
+  .motion{ padding: 40px 0 60px; }
+  .motion__head{ margin-bottom: 24px; }
+  .motion__title{ font-size: clamp(36px, 11vw, 56px); }
+  .motion__strip{ gap: 14px; }
+  .reel-item__media{ height: 56vh; max-height: 460px; }
+
+  /* ---------- PLAYLIST — stack vertical, kill posições absolutas ---------- */
+  .playlist{ padding-bottom: 50px; }
+  .playlist__stage{
+    grid-template-columns: 1fr;
+    gap: 30px;
+    min-height: auto;
+    padding-top: 20px;
+    padding-bottom: 30px;
+  }
+  .vinyl-stage{
+    width: min(72vw, 320px) !important;
+    max-width: none;
+    transform: none !important;
+    margin: 0 auto;
+  }
+  /* wheel vira lista vertical com scroll próprio */
+  .wheel{
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 360px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    padding: 4px 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,244,225,.2) transparent;
+  }
+  .wheel::-webkit-scrollbar{ width: 4px; }
+  .wheel::-webkit-scrollbar-thumb{ background: rgba(255,244,225,.2); border-radius: 2px; }
+  .wheel__inner{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: auto;
+    width: 100%;
+  }
+  /* songs: kill todos os inline styles do rAF (transform/opacity/filter) */
+  .song{
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+  .song__ttl{ max-width: none; }
+  .now__title{ font-size: clamp(40px, 11vw, 64px); }
+  .now__art{ font-size: clamp(26px, 7vw, 40px); }
+
+  /* ---------- FOOTER ---------- */
+  .foot{ padding: 60px var(--pad-x) 30px; }
+  .foot__hi{ font-size: clamp(40px, 12vw, 60px); }
+  .foot__big{ font-size: clamp(56px, 18vw, 96px); }
+  .foot__row{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .foot__meta{ text-align: left; }
+  .foot__link{ font-size: 18px; }
+  .foot__bottom{
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    margin-top: 50px;
+  }
+  .foot__credit{ font-size: 9px; }
+
+  /* ---------- MARQUEE ---------- */
+  .marquee{ padding: 16px 0; }
+  .marquee__track{ font-size: clamp(28px, 9vw, 48px); gap: 30px; }
+
+  /* ---------- NAV ---------- */
+  .nav{ padding: 14px var(--pad-x); }
+  .nav__brand{ font-size: 18px; }
+}
+
+/* =================================================================
+   TOUCH — restaura cursor nativo e esconde a estrela
+================================================================= */
+@media (hover: none){
+  html, body, a, button{ cursor: auto !important; }
+  .cursor{ display: none !important; }
 }
