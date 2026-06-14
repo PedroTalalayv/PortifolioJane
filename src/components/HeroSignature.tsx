@@ -12,7 +12,7 @@ const BG_WORDS = [
   'MOTION',
   'SOCIAL',
   'BRANDING',
-  'SÃO PAULO',
+  'GOIÂNIA',
   '2026',
 ];
 

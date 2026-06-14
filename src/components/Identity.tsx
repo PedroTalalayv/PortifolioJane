@@ -64,12 +64,12 @@ export function Identity() {
       id="identidade"
       className="identity"
       data-section="identidade"
-      data-screen-label="04 Mockups"
+      data-screen-label="04 Identidade Visual"
     >
       <div className="hp-wrap" ref={railRef}>
         <div className="hp-sticky">
           <div className="hp-sticky__head">
-            <h2 className="title">mockups</h2>
+            <h2 className="title">identidade visual</h2>
           </div>
 
           <div className="hp-sticky__viewport">
