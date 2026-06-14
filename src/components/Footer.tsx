@@ -73,7 +73,7 @@ export function Footer() {
       </div>
 
       <div className="foot__bottom">
-        <div>© 2026 adora design · jane oliveira</div>
+        <div>© 2026 adora design · janaina pereira</div>
       </div>
 
       <div className="foot__credit">
