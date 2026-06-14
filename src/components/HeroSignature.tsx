@@ -6,7 +6,7 @@ const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
 const BG_WORDS = [
   'ADORA',
-  'JANE OLIVEIRA',
+  'JANAINA PEREIRA',
   'DESIGN',
   'IDENTIDADE',
   'MOTION',

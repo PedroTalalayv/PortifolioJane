@@ -8,7 +8,7 @@ export function About() {
     >
       <div className="about__inner">
         <div className="about__photo reveal">
-          <img className="about__photo-img" src="/uploads/jane-photo.png" alt="Jane Oliveira" />
+          <img className="about__photo-img" src="/uploads/jane-photo.png" alt="Janaina Pereira" />
           <div className="grain" />
           <svg className="about__star" viewBox="0 0 100 100" aria-hidden="true">
             <path
